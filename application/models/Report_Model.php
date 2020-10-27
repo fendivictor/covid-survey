@@ -104,7 +104,7 @@ class Report_Model extends CI_Model {
 
 		if ($data) {
 			foreach ($data as $row) {
-				$labels[] = $row->judul;
+				$labels[] = $row->judul.' ('.$row->jumlah.')';
 				$dataitem[] = number_format($row->prc, 2, '.', ',');
 			}
 		}
@@ -379,6 +379,19 @@ class Report_Model extends CI_Model {
 				) AS e
 				GROUP BY e.line
 			) AS d ON d.line = a.line ", [$date, $date])->result();
+	}
+
+	public function get_survey_timestamp($nik, $date)
+	{
+		$sql = $this->covidDb->query("
+			SELECT a.`insert_at`
+			FROM tb_survei a
+			WHERE a.`nik` = ?
+			AND a.`tanggal` = ?
+			GROUP BY a.`insert_at`
+			LIMIT 1 ", [$nik, $date])->row();
+
+		return isset($sql->insert_at) ? $sql->insert_at : '';
 	}
 }
 

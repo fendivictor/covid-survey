@@ -11,6 +11,7 @@
 			Line: <b>'.$line.'</b> <br/>
 			Team: <b>'.$team.'</b> <br/>
 			Jabatan: <b>'.$jabatan.'</b> <br/>
+			Waktu Survey: <b>'.custom_date_format($timestamp, 'Y-m-d H:i:s', 'd/m/Y H:i').'</b> <br/>
 		</p>
 	';
 

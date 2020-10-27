@@ -61,10 +61,12 @@ class Ajax extends CI_Controller {
 
 		$report = $this->Report_Model->get_detail_question($date, $nik);
 		$personal = $this->Report_Model->personal_data($nik);
+		$timestamp = $this->Report_Model->get_survey_timestamp($nik, $date);
 
 		$data = [
 			'report' => $report,
-			'personal' => $personal
+			'personal' => $personal,
+			'timestamp' => $timestamp
 		];
 
 		$view = $this->load->view('covid/ajax/report_answer', $data, TRUE);

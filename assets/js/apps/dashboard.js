@@ -51,6 +51,9 @@ $(() => {
 								font: {
 									size: 20,
 									weight: 'bold'
+								},
+								formatter: function(value, context) {
+									return value + ' %'
 								}
 							}
 						}
