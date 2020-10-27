@@ -233,6 +233,7 @@ $(() => {
 
 		modalForm.modal('show');
 		$("#nama-detail").html(nama);
+		$("#map-survey").html('');
 
 		$.get(`${baseUrl}ajax/Ajax/detail_question?date=${tgl}&nik=${nik}`)
 			.done(function(data) {
