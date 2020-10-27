@@ -162,6 +162,7 @@ $(() => {
 		// makeLineChart();
 		loadPopulationMap();
 		dtHighRisk.ajax.url(`${baseUrl}ajax/Datatable/tb_high_risk_person?date=${startDate.format('YYYY-MM-DD')}`).load();
+		tbLine.ajax.url(`${baseUrl}ajax/Datatable/dt_deteksi_mandiri_line?date=${startDate.format('YYYY-MM-DD')}`).load();
 	});
 
 	let dtHighRisk = tbHighRisk.DataTable({
