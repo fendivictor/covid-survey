@@ -76,24 +76,36 @@ class Report_Model extends CI_Model {
 		$dataitem = [];
 
 		$data = $this->covidDb->query("
-			SELECT COUNT(nik) AS jumlah, judul
+			SELECT judul, jumlah, jml_survey, (jumlah / jml_survey) * 100 AS prc
 			FROM (
-				SELECT a.*, b.`class`, b.judul
+				SELECT COUNT(nik) AS jumlah, judul, IFNULL(c.jumlah, 0) AS jml_survey
 				FROM (
-					SELECT a.`nik`, SUM(a.point) AS `point`
-					FROM tb_survei a
-					WHERE a.`tanggal` = ?
-					GROUP BY a.`nik`
-				) AS a
-				INNER JOIN tb_rule b ON a.point BETWEEN b.`min` AND b.`max`
-			) AS b 
-			GROUP BY class
-			ORDER BY class ", [$date])->result();
+					SELECT a.*, b.`class`, b.judul
+					FROM (
+						SELECT a.`nik`, SUM(a.point) AS `point`
+						FROM tb_survei a
+						WHERE a.`tanggal` = ?
+						GROUP BY a.`nik`
+					) AS a
+					INNER JOIN tb_rule b ON a.point BETWEEN b.`min` AND b.`max`
+				) AS b 
+				LEFT JOIN (
+					SELECT COUNT(nik) AS jumlah
+					FROM (
+						SELECT c.`nik`
+						FROM tb_survei c
+						WHERE c.`tanggal` = ?
+						GROUP BY c.`nik`
+					) AS b
+				) AS c ON 1 = 1
+				GROUP BY class
+				ORDER BY class
+			) AS c ", [$date, $date])->result();
 
 		if ($data) {
 			foreach ($data as $row) {
 				$labels[] = $row->judul;
-				$dataitem[] = $row->jumlah;
+				$dataitem[] = number_format($row->prc, 2, '.', ',');
 			}
 		}
 
@@ -299,8 +311,8 @@ class Report_Model extends CI_Model {
 				GROUP BY a.`nik`
 			) AS b 
 			INNER JOIN ms_personal_data c ON b.nik = c.`nik`
-			ORDER BY score DESC
-			LIMIT 10 ", [$date])->result();
+			WHERE score >= 5
+			ORDER BY score DESC ", [$date])->result();
 	}
 
 	public function get_high_risk_population($date)
@@ -319,6 +331,54 @@ class Report_Model extends CI_Model {
 			AND b.lat <> '' 
 			AND b.long <> ''
 			ORDER BY b.score DESC ", [$date])->result();
+	}
+
+	public function dt_deteksi_mandiri_line($date)
+	{
+		return $this->covidDb->query("
+			SELECT a.line, IFNULL(b.jumlah, 0) AS jumlah_karyawan,
+			IFNULL(c.jumlah, 0) AS sdh_survey, (IFNULL(b.jumlah, 0) - IFNULL(c.jumlah, 0)) AS blm_survey,
+			IFNULL(d.rendah, 0) AS rendah, IFNULL(d.sedang, 0) AS sedang, IFNULL(d.tinggi, 0) AS tinggi
+			FROM (
+			SELECT a.`line`
+			FROM ms_personal_data a
+			GROUP BY a.`line`
+			) AS a
+			LEFT JOIN (
+				SELECT b.`line`, COUNT(b.`nik`) AS jumlah
+				FROM ms_personal_data b
+				GROUP BY b.`line`
+			) AS b ON a.line = b.line
+			LEFT JOIN (
+				SELECT c.`line`, COUNT(c.`line`) AS jumlah
+				FROM (
+					SELECT a.`nik`
+					FROM tb_survei a
+					WHERE a.`tanggal` = ?
+					GROUP BY a.`nik`
+				) AS b
+				INNER JOIN ms_personal_data c ON c.`nik` = b.nik
+				GROUP BY c.`line`
+			) AS c ON a.line = c.line
+			LEFT JOIN (
+				SELECT line, SUM(rendah) AS rendah, SUM(sedang) AS sedang,
+				SUM(tinggi) AS tinggi
+				FROM (
+					SELECT b.nik, b.score, c.`line`, d.`class`,
+					IF (d.`class` = 'info', 1, 0) AS rendah,
+					IF (d.`class` = 'warning', 1, 0) AS sedang,
+					IF (d.`class` = 'danger', 1, 0) AS tinggi
+					FROM (
+						SELECT a.`nik`, SUM(a.`point`) AS score
+						FROM tb_survei a
+						WHERE a.`tanggal` = ?
+						GROUP BY a.`nik`
+					) AS b
+					INNER JOIN ms_personal_data c ON c.`nik` = b.nik
+					INNER JOIN tb_rule d ON b.score BETWEEN d.`min` AND d.`max`
+				) AS e
+				GROUP BY e.line
+			) AS d ON d.line = a.line ", [$date, $date])->result();
 	}
 }
 

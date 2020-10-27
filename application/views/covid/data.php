@@ -31,7 +31,7 @@
 			<div class="col-md-8" style="margin-top: 50px;">
 				<div id="jawaban-survey"></div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-4" style="margin-top: 50px;">
 				<div id="map-survey"></div>
 			</div>
 		</div>

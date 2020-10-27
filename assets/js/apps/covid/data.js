@@ -34,6 +34,7 @@ $(() => {
 					buttons: [{
 				        extend: "excel",
 				        className: "btn yellow btn-outline ",
+				        title: 'Summary Report',
 				        text: '<i class="fa fa-file-excel"></i> Export to Excel'
 				    }],
 				    dom: "<'row'<'col-md-12 mb-4'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
@@ -56,6 +57,9 @@ $(() => {
 
 	btnTampil.click(function() {
 		loadTbReport();
+		reportDetail.html('');
+		jawabanSurvey.html('');
+		$("#map-survey").html('');
 	});
 
 	$(document).on('click', '.show-detail', function() {
@@ -70,13 +74,13 @@ $(() => {
 
 				reportDetail.html(data);
 				jawabanSurvey.html('');
+				$("#map-survey").html('');
 
 				let tbDetail = $('#dt-detail').DataTable({
-					searching: false,
-					paging: false,
 					info: false,
 					buttons: [{
 				        extend: "excel",
+				        title: 'Detail Summary Report',
 				        className: "btn yellow btn-outline ",
 				        text: '<i class="fa fa-file-excel"></i> Export to Excel'
 				    }],

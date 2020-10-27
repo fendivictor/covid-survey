@@ -20,7 +20,7 @@
 				<canvas class="chart" id="risk-chart" style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
 			</div>
 			<div class="col-md-6">
-				<h6 class="text-center">10 Orang Resiko Tinggi</h6>
+				<h6 class="text-center">Daftar Orang Beresiko Tinggi</h6>
 				<div class="table-responsive">
 					<table class="table table-striped" id="tb-high-risk">
 						<thead>
@@ -35,8 +35,48 @@
 					</table>
 				</div>
 			</div>
-			<div class="col-md-12">
+
+			<!-- <div class="col-md-12">
 				<canvas class="chart" id="perline-chart" style="min-height: 450px; height: 600px; max-height: 600px; max-width: 100%; margin-bottom: 40px;"></canvas>
+			</div> -->
+
+			<div class="col-md-12">
+				<h6 class="text-center">Data Kelompok Resiko Per Line</h6>
+				<table class="table table-striped" id="dt-line" style="width: 100%;">
+					<thead>
+						<tr>
+							<th rowspan="2">Line</th>
+							<th rowspan="2">Total Karyawan</th>
+							<th rowspan="2">Sudah Survey</th>
+							<th rowspan="2">Belum Survey</th>
+							<th colspan="2" style="background-color: #36a2eb; color: #fff;">Resiko Rendah</th>
+							<th colspan="2" style="background-color: #ffcd56; color: #fff;">Resiko Sedang</th>
+							<th colspan="2" style="background-color: #ff6384; color: #fff;">Resiko Tinggi</th>
+						</tr>
+						<tr>
+							<th style="background-color: #36a2eb; color: #fff;">(0)</th>
+							<th style="background-color: #36a2eb; color: #fff;">(%)</th>
+							<th style="background-color: #ffcd56; color: #fff;">(0)</th>
+							<th style="background-color: #ffcd56; color: #fff;">(%)</th>
+							<th style="background-color: #ff6384; color: #fff;">(0)</th>
+							<th style="background-color: #ff6384; color: #fff;">(%)</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<tr>
+							<th>Total</th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+						</tr>
+					</tfoot>
+				</table>
 			</div>
 
 			<div class="col-md-12">

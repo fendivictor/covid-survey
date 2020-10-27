@@ -44,6 +44,15 @@ $(() => {
 				        animation: {
 							animateScale: true,
 							animateRotate: true
+						},
+						plugins: {
+							datalabels: {
+								color: 'white',
+								font: {
+									size: 20,
+									weight: 'bold'
+								}
+							}
 						}
 					}
 				});
@@ -143,11 +152,11 @@ $(() => {
 			});
 	}
 
-	makeLineChart();
+	// makeLineChart();
 
 	btnTampil.click(function() {
 		makeRiskChart();
-		makeLineChart();
+		// makeLineChart();
 		loadPopulationMap();
 		dtHighRisk.ajax.url(`${baseUrl}ajax/Datatable/tb_high_risk_person?date=${startDate.format('YYYY-MM-DD')}`).load();
 	});
@@ -155,9 +164,7 @@ $(() => {
 	let dtHighRisk = tbHighRisk.DataTable({
 		processing: true,
 		serverSide: false,
-		searching: false,
 		ordering: false,
-		paging: false,
 		info: false,
 		ajax: {
 			url: `${baseUrl}ajax/Datatable/tb_high_risk_person?date=${startDate.format('YYYY-MM-DD')}`
@@ -271,6 +278,93 @@ $(() => {
 
 				unBlockUI();
 			});
+	});
+
+	let tbLine = $("#dt-line").DataTable({
+		processing: true,
+		serverSide: false,
+		ajax: {
+			url: `${baseUrl}ajax/Datatable/dt_deteksi_mandiri_line?date=${startDate.format('YYYY-MM-DD')}`
+		},
+		buttons: [{
+	        extend: "excel",
+	        title: 'Data Kelompok Resiko per Line',
+	        className: "btn yellow btn-outline ",
+	        text: '<i class="fa fa-file-excel"></i> Export to Excel'
+	    }],
+	    dom: "<'row'<'col-md-12 mb-4'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+		columnDefs: [
+			{targets: 0, data: 'line'},
+			{targets: 1, data: 'total', className: 'text-center'},
+			{targets: 2, data: 'sdh_survey', className: 'text-center'},
+			{targets: 3, data: 'blm_survey', className: 'text-center'},
+			{targets: 4, data: 'rendah', className: 'text-center'},
+			{targets: 5, data: 'rendah_prc', className: 'text-center'},
+			{targets: 6, data: 'sedang', className: 'text-center'},
+			{targets: 7, data: 'sedang_prc', className: 'text-center'},
+			{targets: 8, data: 'tinggi', className: 'text-center'},
+			{targets: 9, data: 'tinggi_prc', className: 'text-center'}
+		],
+		footerCallback: function(row, data, start, end, display) {
+            var api = this.api(), data;
+
+            // converting to interger to find total
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            let totalKaryawan = api.column(1).data().reduce(function(a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0);
+
+            totalKaryawan = totalKaryawan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            $( api.column( 1 ).footer() ).html(totalKaryawan);
+
+
+            let totalSdhSurvey = api.column(2).data().reduce(function(a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0);
+
+            totalSdhSurvey = totalSdhSurvey.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            $( api.column( 2 ).footer() ).html(totalSdhSurvey);
+
+            let totalBlmSurvey = api.column(3).data().reduce(function(a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0);
+
+            totalBlmSurvey = totalBlmSurvey.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            $( api.column( 3 ).footer() ).html(totalBlmSurvey);
+
+            let totalRendah = api.column(4).data().reduce(function(a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0);
+
+            totalRendah = totalRendah.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            $( api.column( 4 ).footer() ).html(totalRendah);
+
+            let totalSedang = api.column(6).data().reduce(function(a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0);
+
+            totalSedang = totalSedang.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            $( api.column( 6 ).footer() ).html(totalSedang);
+
+            let totalTinggi = api.column(8).data().reduce(function(a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0);
+
+            totalTinggi = totalTinggi.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            $( api.column( 8 ).footer() ).html(totalTinggi);
+        }
 	});
 
 });
