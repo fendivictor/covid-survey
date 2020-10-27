@@ -47,11 +47,11 @@ class Datatable extends CI_Controller {
 					'sdh_survey' => $row->sdh_survey,
 					'blm_survey' => $row->blm_survey,
 					'rendah' => $row->rendah,
-					'rendah_prc' => ($row->rendah > 0) ? ($row->rendah / $row->sdh_survey) * 100 . ' %' : 0,
+					'rendah_prc' => ($row->rendah > 0) ? number_format(($row->rendah / $row->sdh_survey) * 100, 2, ',', '.') . ' %' : 0,
 					'sedang' => $row->sedang,
-					'sedang_prc' => ($row->sedang > 0) ? ($row->sedang / $row->sdh_survey) * 100 . ' %' : 0,
+					'sedang_prc' => ($row->sedang > 0) ? number_format(($row->sedang / $row->sdh_survey) * 100, 2, ',', '.') . ' %' : 0,
 					'tinggi' => $row->tinggi,
-					'tinggi_prc' => ($row->tinggi > 0) ? ($row->tinggi / $row->sdh_survey) * 100 . ' %' : 0
+					'tinggi_prc' => ($row->tinggi > 0) ? number_format(($row->tinggi / $row->sdh_survey) * 100, 2, ',', '.') . ' %' : 0
 				];
 			}
 		}
