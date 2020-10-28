@@ -92,6 +92,24 @@ class Ajax extends CI_Controller {
 
 		$this->output->set_content_type('application/json')->set_output(json_encode($data));
 	}
+
+	public function tb_deteksi_personal()
+	{
+		$startdate = $this->input->get('startdate', TRUE);
+		$enddate = $this->input->get('enddate', TRUE);
+
+		$dateRange = getDatesFromRange($startdate, $enddate);
+		$personal_data = $this->Report_Model->personal_data();
+
+		$data = [
+			'date' => $dateRange,
+			'personal_data' => $personal_data
+		];
+
+		$view = $this->load->view('covid/ajax/tb_deteksi_personal', $data, TRUE);
+
+		echo $view;
+	}
 }
 
 /* End of file Ajax.php */

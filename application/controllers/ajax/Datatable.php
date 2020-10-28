@@ -58,6 +58,31 @@ class Datatable extends CI_Controller {
 
 		$this->output->set_content_type('application/json')->set_output(json_encode(['data' => $response]));
 	}
+
+	public function dt_personal()
+	{
+		$response = [];
+
+		$data = $this->Report_Model->personal_data();
+
+		if ($data) {
+			$no = 1;
+			foreach ($data as $row) {
+				$response[] = [
+					'no' => $no++,
+					'nik' => $row->nik,
+					'nama' => $row->nama,
+					'line' => $row->line,
+					'team' => $row->team,
+					'jabatan' => $row->jabatan,
+					'gender' => $row->gender,
+					'tanggal_lahir' => custom_date_format($row->tanggal_lahir, 'Y-m-d', 'd/m/Y')
+				];
+			}
+		}
+
+		$this->output->set_content_type('application/json')->set_output(json_encode(['data' => $response]));
+	}
 }
 
 /* End of file Datatable.php */

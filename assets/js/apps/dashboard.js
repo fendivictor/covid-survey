@@ -47,9 +47,9 @@ $(() => {
 						},
 						plugins: {
 							datalabels: {
-								color: 'white',
+								color: 'black',
 								font: {
-									size: 20,
+									size: 18,
 									weight: 'bold'
 								},
 								formatter: function(value, context) {

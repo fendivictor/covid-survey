@@ -13,6 +13,7 @@ $lang['menu_history'] = 'Sample History';
 $lang['menu_finish'] = 'サンプル完了';
 $lang['menu_notification'] = 'Notification';
 $lang['menu_deteksi_mandiri'] = 'Data Deteksi Mandiri';
+$lang['menu_personal_data'] = 'Personal Data';
 
 $lang['dashboard'] = '表示板';
 $lang['home'] = '自宅';

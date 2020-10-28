@@ -290,9 +290,13 @@ class Report_Model extends CI_Model {
 		return $response;
 	}
 
-	public function personal_data($nik)
+	public function personal_data($nik = '')
 	{
-		return $this->covidDb->where(['nik' => $nik])->get('ms_personal_data')->row();
+		if ($nik != '') {
+			return $this->covidDb->where(['nik' => $nik])->get('ms_personal_data')->row();
+		}
+
+		return $this->covidDb->get('ms_personal_data')->result();
 	}
 
 	public function get_survey_coordinates($nik, $date)
@@ -392,6 +396,28 @@ class Report_Model extends CI_Model {
 			LIMIT 1 ", [$nik, $date])->row();
 
 		return isset($sql->insert_at) ? $sql->insert_at : '';
+	}
+
+	public function get_daily_score($nik, $tanggal)
+	{
+		$sql = $this->covidDb->query("
+			SELECT a.`nik`, a.`tanggal`, SUM(a.`point`) AS score
+			FROM tb_survei a
+			WHERE a.`nik` = ?
+			AND a.`tanggal` = ?
+			GROUP BY a.`nik`, a.`tanggal` ", [$nik, $tanggal])->row();
+
+		return isset($sql->score) ? $sql->score : 0;
+	}
+
+	public function get_score_level($nilai)
+	{
+		$sql = $this->covidDb->query("
+			SELECT * 
+			FROM tb_rule a 
+			WHERE ? BETWEEN a.min AND a.max ", [$nilai])->row();
+
+		return isset($sql->class) ? $sql->class : '';
 	}
 }
 
