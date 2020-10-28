@@ -3,6 +3,7 @@ $(() => {
 	let endDate = moment();
 	let date = $("#date");
 	let btnTampil = $("#btn-tampil");
+	let btnDownload = $("#btn-download");
 
 	date.daterangepicker({
 		startDate: startDate, 
@@ -26,14 +27,7 @@ $(() => {
 					let tbDeteksi = $("#tb-deteksi").DataTable({
 						processing: true,
 						serverSide: false,
-						lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
-						buttons: [{
-					        extend: "excel",
-					        className: "btn yellow btn-outline ",
-					        title: 'Data Deteksi Mandiri',
-					        text: '<i class="fa fa-file-excel"></i> Export to Excel'
-					    }],
-					    dom: "<'row'<'col-md-12 mb-4'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
+						lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]]
 					});
 
 					let columnCount = tbDeteksi.columns().header().length;
@@ -50,5 +44,9 @@ $(() => {
 
 	btnTampil.click(function() {
 		loadDeteksiPersonal();
+	});
+
+	btnDownload.click(function() {
+		window.location.href = `${baseUrl}Excel/deteksi_mandiri?startdate=${startDate.format('YYYY-MM-DD')}&enddate=${endDate.format('YYYY-MM-DD')}`;
 	});
 });
