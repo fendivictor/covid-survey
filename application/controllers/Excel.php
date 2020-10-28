@@ -57,6 +57,15 @@ class Excel extends CI_Controller {
 			]
 		];
 
+		$font_green = [
+			'font' => [
+				'color' => [
+					'argb' => '009900'
+				],
+				'bold' => true
+			]
+		];
+
 		$font_red = [
 			'font' => [
 				'color' => [

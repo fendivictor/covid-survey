@@ -76,31 +76,31 @@ class Report_Model extends CI_Model {
 		$dataitem = [];
 
 		$data = $this->covidDb->query("
-			SELECT judul, jumlah, jml_survey, (jumlah / jml_survey) * 100 AS prc
+			SELECT judul, jumlah, jumlah_survey, (jumlah / jumlah_survey) * 100 AS prc
 			FROM (
-				SELECT COUNT(nik) AS jumlah, judul, IFNULL(c.jumlah, 0) AS jml_survey
-				FROM (
-					SELECT a.*, b.`class`, b.judul
+				SELECT id, judul, COUNT(id) AS jumlah, jumlah AS jumlah_survey
 					FROM (
-						SELECT a.`nik`, SUM(a.point) AS `point`
+						SELECT a.`id`, a.`judul`, b.score, c.jumlah
+						FROM tb_rule a
+						LEFT JOIN (
+						SELECT a.`nik`, SUM(a.`point`) AS score
 						FROM tb_survei a
 						WHERE a.`tanggal` = ?
 						GROUP BY a.`nik`
-					) AS a
-					INNER JOIN tb_rule b ON a.point BETWEEN b.`min` AND b.`max`
-				) AS b 
-				LEFT JOIN (
-					SELECT COUNT(nik) AS jumlah
-					FROM (
-						SELECT c.`nik`
-						FROM tb_survei c
-						WHERE c.`tanggal` = ?
-						GROUP BY c.`nik`
-					) AS b
-				) AS c ON 1 = 1
-				GROUP BY class
-				ORDER BY class
-			) AS c ", [$date, $date])->result();
+						) AS b ON b.score BETWEEN a.`min` AND a.`max`
+							LEFT JOIN (
+							SELECT COUNT(nik) AS jumlah
+							FROM (
+							SELECT c.`nik`
+							FROM tb_survei c
+							WHERE c.`tanggal` = ?
+							GROUP BY c.`nik`
+						) AS b
+					) AS c ON 1 = 1
+				) AS d
+				GROUP BY id
+			) AS e 
+			ORDER BY e.id ASC ", [$date, $date])->result();
 
 		if ($data) {
 			foreach ($data as $row) {
@@ -113,9 +113,14 @@ class Report_Model extends CI_Model {
 			'label' => $labels,
 			'data' => $dataitem,
 			'backgroundColor' => [
-				'rgb(255, 99, 132)',
 				'rgb(54, 162, 235)',
-				'rgb(255, 205, 86)'
+				'rgb(255, 205, 86)',
+				'rgb(255, 99, 132)',
+				'rgb(255, 99, 132)'
+			],
+			'datalabels' => [
+				'anchor' => 'center',
+				'rotation' => 40
 			]
 		];
 
@@ -342,7 +347,8 @@ class Report_Model extends CI_Model {
 		return $this->covidDb->query("
 			SELECT a.line, IFNULL(b.jumlah, 0) AS jumlah_karyawan,
 			IFNULL(c.jumlah, 0) AS sdh_survey, (IFNULL(b.jumlah, 0) - IFNULL(c.jumlah, 0)) AS blm_survey,
-			IFNULL(d.rendah, 0) AS rendah, IFNULL(d.sedang, 0) AS sedang, IFNULL(d.tinggi, 0) AS tinggi
+			IFNULL(d.rendah, 0) AS rendah, IFNULL(d.sedang, 0) AS sedang, IFNULL(d.tinggi, 0) AS tinggi,
+			IFNULL(d.sangat_tinggi, 0) AS sangat_tinggi
 			FROM (
 			SELECT a.`line`
 			FROM ms_personal_data a
@@ -366,12 +372,13 @@ class Report_Model extends CI_Model {
 			) AS c ON a.line = c.line
 			LEFT JOIN (
 				SELECT line, SUM(rendah) AS rendah, SUM(sedang) AS sedang,
-				SUM(tinggi) AS tinggi
+				SUM(tinggi) AS tinggi, SUM(sangat_tinggi) AS sangat_tinggi
 				FROM (
 					SELECT b.nik, b.score, c.`line`, d.`class`,
-					IF (d.`class` = 'info', 1, 0) AS rendah,
-					IF (d.`class` = 'warning', 1, 0) AS sedang,
-					IF (d.`class` = 'danger', 1, 0) AS tinggi
+					IF (d.judul = 'Resiko Rendah', 1, 0) AS rendah,
+					IF (d.judul = 'Resiko Sedang', 1, 0) AS sedang,
+					IF (d.judul = 'Resiko Tinggi', 1, 0) AS tinggi,
+					IF (d.judul = 'Resiko Sangat Tinggi', 1, 0) AS sangat_tinggi
 					FROM (
 						SELECT a.`nik`, SUM(a.`point`) AS score
 						FROM tb_survei a
@@ -407,7 +414,7 @@ class Report_Model extends CI_Model {
 			AND a.`tanggal` = ?
 			GROUP BY a.`nik`, a.`tanggal` ", [$nik, $tanggal])->row();
 
-		return isset($sql->score) ? $sql->score : 0;
+		return isset($sql->score) ? $sql->score : '';
 	}
 
 	public function get_score_level($nilai)

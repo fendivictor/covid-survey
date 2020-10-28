@@ -34,11 +34,18 @@
 						if ($date) {
 							foreach ($date as $val) {
 								$nilai = $this->Report_Model->get_daily_score($row->nik, $val);
-								$level = $this->Report_Model->get_score_level($nilai);
+
+								if ($nilai == '') {
+									$level = '-';
+								} else {
+									$level = $this->Report_Model->get_score_level($nilai);
+								}
 
 								echo '<td class="text-center"><span class="text-'.$level.'">'.$nilai.'</span></td>';
 
-								$total += $nilai;
+								if ($nilai != '') {
+									$total += $nilai;
+								}
 							}
 						}
 

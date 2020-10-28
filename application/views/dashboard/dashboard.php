@@ -20,7 +20,7 @@
 				<canvas class="chart" id="risk-chart" style="min-height: 450px; height: 450px; max-height: 450px; max-width: 100%;"></canvas>
 			</div>
 			<div class="col-md-6">
-				<h6 class="text-center">Daftar Orang Beresiko Tinggi</h6>
+				<h6 class="text-center">Daftar Orang Beresiko Tinggi & Sangat Tinggi</h6>
 				<div class="table-responsive">
 					<table class="table table-striped" id="tb-high-risk">
 						<thead>
@@ -53,12 +53,15 @@
 								<th colspan="2" style="background-color: #36a2eb; color: #fff;">Resiko Rendah</th>
 								<th colspan="2" style="background-color: #ffcd56; color: #fff;">Resiko Sedang</th>
 								<th colspan="2" style="background-color: #ff6384; color: #fff;">Resiko Tinggi</th>
+								<th colspan="2" style="background-color: #ff6384; color: #fff;">Resiko Sangat Tinggi</th>
 							</tr>
 							<tr>
 								<th style="background-color: #36a2eb; color: #fff;">(0)</th>
 								<th style="background-color: #36a2eb; color: #fff;">(%)</th>
 								<th style="background-color: #ffcd56; color: #fff;">(0)</th>
 								<th style="background-color: #ffcd56; color: #fff;">(%)</th>
+								<th style="background-color: #ff6384; color: #fff;">(0)</th>
+								<th style="background-color: #ff6384; color: #fff;">(%)</th>
 								<th style="background-color: #ff6384; color: #fff;">(0)</th>
 								<th style="background-color: #ff6384; color: #fff;">(%)</th>
 							</tr>
@@ -75,6 +78,8 @@
 								<th></th>
 								<th></th>
 								<th></th>
+								<th></th>
+								<th></th>
 							</tr>
 						</tfoot>
 					</table>
@@ -82,7 +87,7 @@
 			</div>
 
 			<div class="col-md-12">
-				<h6 class="text-center">Peta Persebaran Karyawan dengan Resiko Tinggi</h6>
+				<h6 class="text-center">Peta Persebaran Karyawan dengan Resiko Tinggi & Sangat Tinggi</h6>
 				<div id="map" style="height: 500px; margin-top: 20px;"></div>
 			</div>
     	</div>	

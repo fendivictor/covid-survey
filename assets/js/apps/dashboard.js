@@ -49,7 +49,7 @@ $(() => {
 							datalabels: {
 								color: 'black',
 								font: {
-									size: 18,
+									size: 14,
 									weight: 'bold'
 								},
 								formatter: function(value, context) {
@@ -307,7 +307,9 @@ $(() => {
 			{targets: 6, data: 'sedang', className: 'text-center'},
 			{targets: 7, data: 'sedang_prc', className: 'text-center'},
 			{targets: 8, data: 'tinggi', className: 'text-center'},
-			{targets: 9, data: 'tinggi_prc', className: 'text-center'}
+			{targets: 9, data: 'tinggi_prc', className: 'text-center'},
+			{targets: 10, data: 'sangat_tinggi', className: 'text-center'},
+			{targets: 11, data: 'sangat_tinggi_prc', className: 'text-center'}
 		],
 		footerCallback: function(row, data, start, end, display) {
             var api = this.api(), data;
@@ -368,6 +370,14 @@ $(() => {
             totalTinggi = totalTinggi.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
             $( api.column( 8 ).footer() ).html(totalTinggi);
+
+			let totalSngTinggi = api.column(10).data().reduce(function(a, b) {
+            	return intVal(a) + intVal(b);
+            }, 0);
+
+            totalSngTinggi = totalSngTinggi.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            $( api.column( 10 ).footer() ).html(totalSngTinggi);            
         }
 	});
 

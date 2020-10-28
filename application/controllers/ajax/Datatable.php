@@ -51,7 +51,9 @@ class Datatable extends CI_Controller {
 					'sedang' => $row->sedang,
 					'sedang_prc' => ($row->sedang > 0) ? number_format(($row->sedang / $row->sdh_survey) * 100, 2, ',', '.') . ' %' : 0,
 					'tinggi' => $row->tinggi,
-					'tinggi_prc' => ($row->tinggi > 0) ? number_format(($row->tinggi / $row->sdh_survey) * 100, 2, ',', '.') . ' %' : 0
+					'tinggi_prc' => ($row->tinggi > 0) ? number_format(($row->tinggi / $row->sdh_survey) * 100, 2, ',', '.') . ' %' : 0,
+					'sangat_tinggi' => $row->sangat_tinggi,
+					'sangat_tinggi_prc' => ($row->sangat_tinggi > 0) ? number_format(($row->sangat_tinggi / $row->sdh_survey) * 100, 2, ',', '.') . ' %' : 0
 				];
 			}
 		}
