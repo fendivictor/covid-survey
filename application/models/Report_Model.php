@@ -78,29 +78,36 @@ class Report_Model extends CI_Model {
 		$data = $this->covidDb->query("
 			SELECT judul, jumlah, jumlah_survey, (jumlah / jumlah_survey) * 100 AS prc
 			FROM (
-				SELECT id, judul, COUNT(id) AS jumlah, jumlah AS jumlah_survey
-					FROM (
-						SELECT a.`id`, a.`judul`, b.score, c.jumlah
-						FROM tb_rule a
-						LEFT JOIN (
-						SELECT a.`nik`, SUM(a.`point`) AS score
-						FROM tb_survei a
-						WHERE a.`tanggal` = ?
-						GROUP BY a.`nik`
-						) AS b ON b.score BETWEEN a.`min` AND a.`max`
-							LEFT JOIN (
-							SELECT COUNT(nik) AS jumlah
-							FROM (
-							SELECT c.`nik`
-							FROM tb_survei c
-							WHERE c.`tanggal` = ?
-							GROUP BY c.`nik`
-						) AS b
-					) AS c ON 1 = 1
-				) AS d
-				GROUP BY id
-			) AS e 
-			ORDER BY e.id ASC ", [$date, $date])->result();
+			SELECT e.`id`, e.`judul`, IFNULL(f.jumlah, 0) AS jumlah, IFNULL(g.jumlah, 0) AS jumlah_survey
+			FROM tb_rule e
+			LEFT JOIN (
+
+			SELECT id, judul, COUNT(id) AS jumlah
+			FROM (
+			SELECT b.`id`, b.`judul`, c.*
+			FROM tb_rule b
+			INNER JOIN (
+			SELECT a.`nik`, SUM(a.`point`) AS score
+			FROM tb_survei a
+			WHERE a.`tanggal` = ?
+			GROUP BY a.`nik`
+			) AS c ON c.score BETWEEN b.`min` AND b.`max`
+			) AS c
+			GROUP BY id
+
+			) AS f ON f.id = e.`id`
+
+			LEFT JOIN (
+			SELECT COUNT(nik) AS jumlah
+			FROM (
+			SELECT c.`nik`
+			FROM tb_survei c
+			WHERE c.`tanggal` = ?
+			GROUP BY c.`nik`
+			) AS b 
+			) AS g ON 1 = 1
+			) AS r
+			ORDER BY r.id ASC ", [$date, $date])->result();
 
 		if ($data) {
 			foreach ($data as $row) {
