@@ -42,41 +42,43 @@
 
 			<div class="col-md-12">
 				<h6 class="text-center">Data Kelompok Resiko Per Line</h6>
-				<table class="table table-striped" id="dt-line" style="width: 100%;">
-					<thead>
-						<tr>
-							<th rowspan="2">Line</th>
-							<th rowspan="2">Total Karyawan</th>
-							<th rowspan="2">Sudah Survey</th>
-							<th rowspan="2">Belum Survey</th>
-							<th colspan="2" style="background-color: #36a2eb; color: #fff;">Resiko Rendah</th>
-							<th colspan="2" style="background-color: #ffcd56; color: #fff;">Resiko Sedang</th>
-							<th colspan="2" style="background-color: #ff6384; color: #fff;">Resiko Tinggi</th>
-						</tr>
-						<tr>
-							<th style="background-color: #36a2eb; color: #fff;">(0)</th>
-							<th style="background-color: #36a2eb; color: #fff;">(%)</th>
-							<th style="background-color: #ffcd56; color: #fff;">(0)</th>
-							<th style="background-color: #ffcd56; color: #fff;">(%)</th>
-							<th style="background-color: #ff6384; color: #fff;">(0)</th>
-							<th style="background-color: #ff6384; color: #fff;">(%)</th>
-						</tr>
-					</thead>
-					<tfoot>
-						<tr>
-							<th>Total</th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-						</tr>
-					</tfoot>
-				</table>
+				<div class="table-responsive">
+					<table class="table table-striped" id="dt-line" style="width: 100%;">
+						<thead>
+							<tr>
+								<th rowspan="2">Line</th>
+								<th rowspan="2">Total Karyawan</th>
+								<th rowspan="2">Sudah Survey</th>
+								<th rowspan="2">Belum Survey</th>
+								<th colspan="2" style="background-color: #36a2eb; color: #fff;">Resiko Rendah</th>
+								<th colspan="2" style="background-color: #ffcd56; color: #fff;">Resiko Sedang</th>
+								<th colspan="2" style="background-color: #ff6384; color: #fff;">Resiko Tinggi</th>
+							</tr>
+							<tr>
+								<th style="background-color: #36a2eb; color: #fff;">(0)</th>
+								<th style="background-color: #36a2eb; color: #fff;">(%)</th>
+								<th style="background-color: #ffcd56; color: #fff;">(0)</th>
+								<th style="background-color: #ffcd56; color: #fff;">(%)</th>
+								<th style="background-color: #ff6384; color: #fff;">(0)</th>
+								<th style="background-color: #ff6384; color: #fff;">(%)</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th>Total</th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 			</div>
 
 			<div class="col-md-12">
