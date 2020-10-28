@@ -2,7 +2,6 @@
 	<table class="table table-striped table-hovered" id="tb-deteksi">
 		<thead>
 			<tr>
-				<th rowspan="2">#</th>
 				<th rowspan="2">NIK</th>
 				<th rowspan="2">Nama</th>
 				<th rowspan="2">Line</th>
@@ -26,7 +25,6 @@
 					foreach ($personal_data as $row) {
 						echo '
 							<tr>
-								<td>'.$no++.'</td>
 								<td>'.$row->nik.'</td>
 								<td>'.$row->nama.'</td>
 								<td>'.$row->line.'</td>

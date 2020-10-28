@@ -234,7 +234,7 @@ class Report_Model extends CI_Model {
 	public function detail_question($date, $nik, $parent)
 	{
 		$condition = ($parent == '') ? " AND b.id_parent IS NULL " : " AND b.id_parent = '$parent' ";
-		$answer = ($parent == '') ? " IF(a.`answer` = 1, 'Ya', 'Tidak') AS jawaban " : " IF(c.id IS NULL, a.answer, IFNULL(c.title, '')) AS jawaban ";
+		$answer = ($parent == '') ? " IF(a.`answer` = 1, 'Ya', 'Tidak') AS jawaban " : " IF(a.keterangan <> '', a.keterangan, IF(c.id IS NULL, a.answer, IFNULL(c.title, ''))) AS jawaban ";
 
 		return $this->covidDb->query("
 			SELECT b.id, a.`tanggal`, a.`nik`, a.`user_insert`, b.`pertanyaan`, $answer, a.`point`,
