@@ -246,14 +246,15 @@ class Report_Model extends CI_Model {
 	public function detail_question($date, $nik, $parent)
 	{
 		$condition = ($parent == '') ? " AND b.id_parent IS NULL " : " AND b.id_parent = '$parent' ";
-		$answer = ($parent == '') ? " IF(a.`answer` = 1, 'Ya', 'Tidak') AS jawaban " : " IF(a.keterangan <> '', a.keterangan, IF(c.id IS NULL, a.answer, IFNULL(c.title, ''))) AS jawaban ";
+		$answer = ($parent == '') ? " IF(a.`answer` = 1, 'Ya', 'Tidak') AS jawaban " : " IF(a.keterangan <> '', a.keterangan, IF(c.id IS NULL, a.answer, IFNULL(d.title, ''))) AS jawaban ";
 
 		return $this->covidDb->query("
 			SELECT b.id, a.`tanggal`, a.`nik`, a.`user_insert`, b.`pertanyaan`, $answer, a.`point`,
-			IFNULL(c.`id`, '') AS id_penyakit, IFNULL(c.`title`, '') AS jenis_penyakit
+			IFNULL(c.`id`, '') AS id_penyakit, IFNULL(d.`title`, '') AS jenis_penyakit
 			FROM tb_survei a
 			INNER JOIN ms_pertanyaan b ON a.`id_pertanyaan` = b.`id`
-			LEFT JOIN ms_penyakit c ON c.`id` = a.`id_penyakit`
+			LEFT JOIN tb_jawaban c ON c.`id` = a.`id_penyakit`
+  			LEFT JOIN ms_penyakit d ON d.`id` = c.`id_jawaban`
 			WHERE a.`tanggal` = ?
 			AND a.`nik` = ?
 			$condition
