@@ -4,6 +4,8 @@ $(() => {
 	let date = $("#date");
 	let btnTampil = $("#btn-tampil");
 	let btnDownload = $("#btn-download");
+	let modalForm = $("#modal-form");
+	let jawabanSurvey = $("#jawaban-survey");
 
 	date.daterangepicker({
 		startDate: startDate, 
@@ -48,5 +50,53 @@ $(() => {
 
 	btnDownload.click(function() {
 		window.location.href = `${baseUrl}Excel/deteksi_mandiri?startdate=${startDate.format('YYYY-MM-DD')}&enddate=${endDate.format('YYYY-MM-DD')}`;
+	});
+
+
+	$(document).on('click', '.showDetailSurvey', function() {
+		let nik = $(this).data('nik');
+		let nama = $(this).data('nama');
+		let tgl = $(this).data('date');
+
+		modalForm.modal('show');
+		$("#nama-detail").html(nama);
+		$("#map-survey").html('');
+
+		$.get(`${baseUrl}ajax/Ajax/detail_question?date=${tgl}&nik=${nik}`)
+			.done(function(data) {
+				jawabanSurvey.html(data);
+
+				$.get(`${baseUrl}ajax/Ajax/get_survey_coordinates?date=${tgl}&nik=${nik}`)
+					.done(function(data) {
+						let lat = data.lat;
+						let long = data.long;
+
+						if (lat != '' && long != '') {
+							$("#map-survey").html("<div id='map-detail' style='height: 450px;'></div>")
+
+							let map = L.map('map-detail').setView([lat, long], 15);
+
+							L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+							    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+							}).addTo(map);
+
+							L.marker([lat, long]).addTo(map);
+						}
+
+						unBlockUI();
+					})
+					.fail(function(err) {
+						toastr.error('Terjadi kesalahan saat memuat data');
+
+						unBlockUI();
+					});
+
+				unBlockUI();
+			})
+			.fail(function(err) {
+				toastr.error('Terjadi kesalahan saat memuat data');
+
+				unBlockUI();
+			});
 	});
 });

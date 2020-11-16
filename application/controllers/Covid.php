@@ -69,6 +69,27 @@ class Covid extends MY_Controller {
 
 		$this->template($header, $body, $footer);
 	}
+
+	public function suhu()
+	{
+		$page = $this->Login_model->isvalid_page();
+		if ($page == false) {
+			show_404();
+		}
+
+		$header = [];
+
+		$body = [
+			'content' => 'covid/suhu',
+			'title' => lang('menu_laporan_suhu')
+		];
+
+		$footer = [
+			'js' => ['assets/js/apps/covid/suhu.js']
+		];
+
+		$this->template($header, $body, $footer);
+	}
 }
 
 /* End of file Covid.php */

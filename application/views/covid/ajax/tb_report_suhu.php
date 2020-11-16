@@ -1,12 +1,12 @@
 <div class="table-responsive">
-	<table class="table table-striped table-hovered" id="tb-deteksi">
+	<table class="table table-striped table-hovered" id="tb-suhu">
 		<thead>
 			<tr>
 				<th rowspan="2">NIK</th>
 				<th rowspan="2">Nama</th>
 				<th rowspan="2">Line</th>
 				<th colspan="<?= count($date); ?>" class="text-center">Tanggal</th>
-				<th rowspan="2" class="text-center">Total</th>
+				<th rowspan="2" class="text-center">Rata-rata</th>
 			</tr>
 			<tr>
 				<?php
@@ -31,27 +31,21 @@
 						';
 
 						$total = 0;
+						$jumlah = 0;
 						if ($date) {
 							foreach ($date as $val) {
-								$nilai = $this->Report_Model->get_daily_score($row->nik, $val);
+								$suhu = $this->Report_Model->get_suhu($row->nik, $val);
 
-								if ($nilai == '') {
-									$level = '-';
-								} else {
-									$level = $this->Report_Model->get_score_level($nilai);
-								}
+								echo '<td class="text-center">'.$suhu.'</td>';
 
-								echo '	<td class="text-center">
-											<span class="text-'.$level.' showDetailSurvey" data-date="'.$val.'" data-nik="'.$row->nik.'" data-nama="'.$row->nama.'" style="cursor:pointer">'.$nilai.'</span>
-										</td>';
-
-								if ($nilai != '') {
-									$total += $nilai;
-								}
+								$total += $suhu;
+								$jumlah += ($suhu > 0) ? 1 : 0;
 							}
 						}
 
-						echo '<td class="text-center">'.$total.'</td>';
+						$avg = ($total > 0) ? ($total / $jumlah) : 0;
+
+						echo '<td class="text-center">'.number_format($avg, 2, '.', ',').'</td>';
 						echo '</tr>';
 					}
 				}

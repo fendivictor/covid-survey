@@ -110,6 +110,99 @@ class Ajax extends CI_Controller {
 
 		echo $view;
 	}
+
+	public function tb_report_suhu()
+	{
+		$startdate = $this->input->get('startdate', TRUE);
+		$enddate = $this->input->get('enddate', TRUE);
+
+		$dateRange = getDatesFromRange($startdate, $enddate);
+		$personal_data = $this->Report_Model->personal_data();
+
+		$data = [
+			'date' => $dateRange,
+			'personal_data' => $personal_data
+		];
+
+		$view = $this->load->view('covid/ajax/tb_report_suhu', $data, TRUE);
+
+		echo $view;
+	}
+
+	public function personal_id()
+	{
+		$nik = $this->input->get('nik', TRUE);
+
+		$data = $this->Report_Model->personal_data($nik);
+
+		$this->output->set_content_type('application/json')->set_output(json_encode($data));
+	}
+
+	public function add_personal()
+	{
+		$id = $this->input->post('id', TRUE);
+		$nik = $this->input->post('nik', TRUE);
+		$nama = $this->input->post('nama', TRUE);
+		$tgllahir = $this->input->post('tgllahir', TRUE);
+		$line = $this->input->post('line', TRUE);
+		$team = $this->input->post('team', TRUE);
+		$jabatan = $this->input->post('jabatan', TRUE);
+		$gender = $this->input->post('gender', TRUE);
+
+		$tgllahir = custom_date_format($tgllahir, 'd/m/Y', 'Y-m-d');
+
+		$data = [
+			'nik' => $nik,
+			'nama' => $nama,
+			'line' => $line,
+			'team' => $team,
+			'jabatan' => $jabatan,
+			'gender' => $gender,
+			'tanggal_lahir' => $tgllahir,
+			'country' => 'indo'
+		];
+
+		$condition = ($id != '') ? ['id' => $id] : [];
+
+		$simpan = $this->Report_Model->add_personal($data, $condition);
+
+		$status = 0;
+		$message = 'Gagal menyimpan data';
+
+		if ($simpan) {
+			$status = 1;
+			$message = 'Data berhasil disimpan';
+		}
+
+		$result = [
+			'status' => $status,
+			'message' => $message
+		];
+
+		$this->output->set_content_type('application/json')->set_output(json_encode($result));
+	}
+
+	public function delete_personal()
+	{
+		$nik = $this->input->post('nik', TRUE);
+
+		$delete = $this->Report_Model->delete_personal($nik);
+
+		$status = 0;
+		$message = 'Gagal menghapus data';
+
+		if ($delete) {
+			$status = 1;
+			$message = 'Data berhasil dihapus';
+		}
+
+		$result = [
+			'status' => $status,
+			'message' => $message
+		];
+
+		$this->output->set_content_type('application/json')->set_output(json_encode($result));
+	}
 }
 
 /* End of file Ajax.php */

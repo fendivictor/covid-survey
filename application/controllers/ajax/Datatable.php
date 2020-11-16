@@ -78,7 +78,12 @@ class Datatable extends CI_Controller {
 					'team' => $row->team,
 					'jabatan' => $row->jabatan,
 					'gender' => $row->gender,
-					'tanggal_lahir' => custom_date_format($row->tanggal_lahir, 'Y-m-d', 'd/m/Y')
+					'tanggal_lahir' => custom_date_format($row->tanggal_lahir, 'Y-m-d', 'd/m/Y'),
+					'tools' => '
+					<div class="btn-group">
+                    	<button type="button" class="btn btn-xs btn-warning btn-edit" data-nik="'.$row->nik.'"><i class="fa fa-edit"></i> Edit</button>
+                        <button type="button" class="btn btn-xs btn-danger btn-delete" data-nik="'.$row->nik.'"><i class="fa fa-trash"></i> Delete</button>
+                  	</div>'
 				];
 			}
 		}

@@ -434,6 +434,56 @@ class Report_Model extends CI_Model {
 
 		return isset($sql->class) ? $sql->class : '';
 	}
+
+	public function get_suhu($nik, $tgl)
+	{
+		$sql = $this->covidDb->query("
+			SELECT *
+			FROM tb_suhu a
+			WHERE a.tanggal = ?
+			AND a.nik = ? ", [$tgl, $nik])->row();
+
+
+		return isset($sql->suhu) ? $sql->suhu : 0;
+	}
+
+	public function add_personal($data, $condition)
+	{
+		$this->covidDb->trans_begin();
+
+		if ($condition) {
+			$this->covidDb->where($condition)->update('ms_personal_data', $data);
+		} else {
+			$this->covidDb->insert('ms_personal_data', $data);
+		}
+
+		if ($this->covidDb->trans_status()) {
+			$this->covidDb->trans_commit();
+
+			return true;
+		} else {
+			$this->covidDb->trans_rollback();
+
+			return false;
+		}
+	}
+
+	public function delete_personal($nik)
+	{
+		$this->covidDb->trans_begin();
+
+		$this->covidDb->where(['nik' => $nik])->delete('ms_personal_data');
+
+		if ($this->covidDb->trans_status()) {
+			$this->covidDb->trans_commit();
+
+			return true;
+		} else {
+			$this->covidDb->trans_rollback();
+
+			return false;
+		}
+	}
 }
 
 /* End of file Report_Model.php */
