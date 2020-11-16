@@ -39,13 +39,13 @@ class Excel extends CI_Controller {
 
 		$spreadsheet = new Spreadsheet();
 		// Set document properties
-		$spreadsheet->getProperties()->setCreator('Fukuryo Sample Control System')
-			->setLastModifiedBy('Fukuryo Sample Control System')
-			->setTitle('Fukuryo Sample Control System')
-			->setSubject('Fukuryo Sample Control System')
-			->setDescription('Fukuryo Sample Control System')
-			->setKeywords('sample control system')
-			->setCategory('sample control system');
+		$spreadsheet->getProperties()->setCreator('Fukuryo covid survey system')
+			->setLastModifiedBy('Fukuryo covid survey system')
+			->setTitle('Fukuryo covid survey system')
+			->setSubject('Fukuryo covid survey system')
+			->setDescription('Fukuryo covid survey system')
+			->setKeywords('covid survey system')
+			->setCategory('covid survey system');
 
 		$merge = [];
 		$styling = [];
@@ -208,13 +208,13 @@ class Excel extends CI_Controller {
 
 		$spreadsheet = new Spreadsheet();
 		// Set document properties
-		$spreadsheet->getProperties()->setCreator('Fukuryo Sample Control System')
-			->setLastModifiedBy('Fukuryo Sample Control System')
-			->setTitle('Fukuryo Sample Control System')
-			->setSubject('Fukuryo Sample Control System')
-			->setDescription('Fukuryo Sample Control System')
-			->setKeywords('sample control system')
-			->setCategory('sample control system');
+		$spreadsheet->getProperties()->setCreator('Fukuryo covid survey system')
+			->setLastModifiedBy('Fukuryo covid survey system')
+			->setTitle('Fukuryo covid survey system')
+			->setSubject('Fukuryo covid survey system')
+			->setDescription('Fukuryo covid survey system')
+			->setKeywords('covid survey system')
+			->setCategory('covid survey system');
 
 		$merge = [];
 		$styling = [];
@@ -292,7 +292,7 @@ class Excel extends CI_Controller {
 
 		$merge[] = "D1:".$kolom."1";
 		$kolom = excel_number_to_column_name($baris);
-		$sheet->setCellValue($kolom."1", "TOTAL");
+		$sheet->setCellValue($kolom."1", "RATA-RATA");
 
 		$merge[] = $kolom."1:".$kolom."2";
 		$personal = $this->Report_Model->personal_data();
@@ -316,9 +316,9 @@ class Excel extends CI_Controller {
 						$baris++;
 					}
 				}
-				$kolomAkhir = excel_number_to_column_name($baris);
+				$kolomAkhir = excel_number_to_column_name($baris - 1);
 				$kolom = excel_number_to_column_name($baris);
-				$sheet->setCellValue($kolom.$row, "=SUM($kolomAwal$row:$kolomAkhir$row)");
+				$sheet->setCellValue($kolom.$row, "=AVERAGE($kolomAwal$row:$kolomAkhir$row)");
 
 				$row++;
 			}
