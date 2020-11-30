@@ -5,6 +5,7 @@ class Covid extends MY_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model(['Report_Model']);
 	}
 
 	public function data()
@@ -86,6 +87,49 @@ class Covid extends MY_Controller {
 
 		$footer = [
 			'js' => ['assets/js/apps/covid/suhu.js']
+		];
+
+		$this->template($header, $body, $footer);
+	}
+
+	public function survey()
+	{
+		$page = $this->Login_model->isvalid_page();
+		if ($page == false) {
+			show_404();
+		}
+
+		$header = [];
+
+		$body = [
+			'content' => 'covid/survey',
+			'title' => lang('menu_laporan_survey')
+		];
+
+		$footer = [
+			'js' => ['assets/js/apps/covid/survey.js']
+		];
+
+		$this->template($header, $body, $footer);
+	}
+
+	public function pertanyaan()
+	{
+		$page = $this->Login_model->isvalid_page();
+		if ($page == false) {
+			show_404();
+		}
+
+		$header = [];
+
+		$body = [
+			'content' => 'covid/pertanyaan',
+			'title' => lang('menu_deteksi_pertanyaan'),
+			'pertanyaan' => $this->Report_Model->get_pertanyaan()
+		];
+
+		$footer = [
+			'js' => ['assets/js/apps/covid/pertanyaan.js']
 		];
 
 		$this->template($header, $body, $footer);

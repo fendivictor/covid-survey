@@ -203,6 +203,42 @@ class Ajax extends CI_Controller {
 
 		$this->output->set_content_type('application/json')->set_output(json_encode($result));
 	}
+
+	public function get_data_survey_by_tgl()
+	{
+		$tgl = $this->input->get('tgl', TRUE);
+
+		$personal_data = $this->Report_Model->personal_data();
+
+		$data = [
+			'personal_data' => $personal_data,
+			'pertanyaan' => $this->Report_Model->get_pertanyaan(),
+			'tgl' => $tgl
+		];
+
+		$view = $this->load->view('covid/ajax/tb_pertanyaan', $data, TRUE);
+
+		echo $view;
+	}
+
+	public function get_data_survey_by_pertanyaan()
+	{
+		$datestart = $this->input->get('datestart', TRUE);
+		$dateend = $this->input->get('dateend', TRUE);
+		$pertanyaan = $this->input->get('pertanyaan', TRUE);
+
+		$personal_data = $this->Report_Model->personal_data();
+
+		$data = [
+			'personal_data' => $personal_data,
+			'tgl' => getDatesFromRange($datestart, $dateend),
+			'pertanyaan' => $pertanyaan
+		];
+
+		$view = $this->load->view('covid/ajax/tb_summary_pertanyaan', $data, TRUE);
+
+		echo $view;
+	}
 }
 
 /* End of file Ajax.php */

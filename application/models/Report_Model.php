@@ -484,6 +484,44 @@ class Report_Model extends CI_Model {
 			return false;
 		}
 	}
+
+	public function get_pertanyaan()
+	{
+		return $this->covidDb->query("
+			SELECT *
+			FROM ms_pertanyaan a 
+			WHERE a.is_child = 0
+			AND a.status = 1 
+			ORDER BY a.id ASC ")->result();
+	}
+
+	public function get_pertanyaan_perhari($tgl, $nik, $pertanyaan)
+	{
+		return $this->covidDb->query("
+			SELECT a.`id`, a.`id_pertanyaan`, b.`pertanyaan`, b.`is_child`, b.`id_parent`, 
+			IF(a.`answer` = 1, 'Ya', 'Tidak') AS answer, a.`keterangan`
+			FROM tb_survei a
+			INNER JOIN ms_pertanyaan b ON a.`id_pertanyaan` = b.`id`
+			LEFT JOIN tb_jawaban c ON c.`id` = a.`id_penyakit`
+  			LEFT JOIN ms_penyakit d ON d.`id` = c.`id_jawaban`
+			WHERE a.`tanggal` = ?
+			AND a.`nik` = ?
+			AND a.`id_pertanyaan` = ? ", [$tgl, $nik, $pertanyaan])->row();	
+	}
+
+	public function get_child_pertanyaan($tgl, $nik, $pertanyaan)
+	{
+		return $this->covidDb->query("
+			SELECT a.`id`, a.`id_pertanyaan`, b.`pertanyaan`, b.`is_child`, b.`id_parent`, 
+			IF(a.`answer` = 1, 'Ya', 'Tidak') AS answer, a.`keterangan`, d.title
+			FROM tb_survei a
+			INNER JOIN ms_pertanyaan b ON a.`id_pertanyaan` = b.`id`
+			LEFT JOIN tb_jawaban c ON c.`id` = a.`id_penyakit`
+  			LEFT JOIN ms_penyakit d ON d.`id` = c.`id_jawaban`
+			WHERE a.`tanggal` = ?
+			AND a.`nik` = ?
+			AND b.`id_parent` = ? ", [$tgl, $nik, $pertanyaan])->result();	
+	}
 }
 
 /* End of file Report_Model.php */
