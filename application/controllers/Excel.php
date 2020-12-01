@@ -13,7 +13,7 @@ class Excel extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['Report_Model']);
+		$this->load->model(['Report_Model', 'Main_Model']);
 	}
 
 	public function replace_invalid_character($string)
@@ -336,6 +336,139 @@ class Excel extends CI_Controller {
 			}
 		}
 
+		// Redirect output to a client’s web browser (Xlsx)
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
+		header('Cache-Control: max-age=0');
+		// If you're serving to IE 9, then the following may be needed
+		header('Cache-Control: max-age=1');
+
+		// If you're serving to IE over SSL, then the following may be needed
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+		header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header('Pragma: public'); // HTTP/1.0
+
+		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		$writer->save('php://output');
+		exit;
+	}
+
+	public function survey_result_by_question()
+	{
+		$pertanyaan = $this->input->get('pertanyaan', TRUE);
+		$datestart = $this->input->get('datestart', TRUE);
+		$dateend = $this->input->get('dateend', TRUE);
+
+		$dateRange = getDatesFromRange($datestart, $dateend);
+		$pertanyaan = explode(',', $pertanyaan);
+
+		$allPertanyaan = [];
+		if ($pertanyaan) {
+			for ($i = 0; $i < count($pertanyaan); $i++) {
+				$parentPertanyaan = $this->Main_Model->view_data_covid('ms_pertanyaan', ['id' => $pertanyaan[$i]], false);
+
+				$allPertanyaan[] = [
+					'id' => $pertanyaan[$i],
+					'pertanyaan' => $parentPertanyaan->pertanyaan
+				];
+
+				$hasChild = $this->Main_Model->view_data_covid('ms_pertanyaan', ['id_parent' => $pertanyaan[$i]], true);
+				if ($hasChild) {
+					foreach ($hasChild as $row) {
+						$allPertanyaan[] = [
+							'id' => $row->id,
+							'pertanyaan' => $row->pertanyaan
+						];
+	 				}
+				}
+			}
+		}
+
+		$jumlahPertanyaan = count($allPertanyaan);
+
+		$spreadsheet = new Spreadsheet();
+		// Set document properties
+		$spreadsheet->getProperties()->setCreator('Fukuryo covid survey system')
+			->setLastModifiedBy('Fukuryo covid survey system')
+			->setTitle('Fukuryo covid survey system')
+			->setSubject('Fukuryo covid survey system')
+			->setDescription('Fukuryo covid survey system')
+			->setKeywords('covid survey system')
+			->setCategory('covid survey system');
+
+		// Add some data
+		$sheet = $spreadsheet->setActiveSheetIndex(0);
+
+		// Rename worksheet
+		$spreadsheet->getActiveSheet()->setTitle('Report Pertanyaan');
+
+		// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+		$spreadsheet->setActiveSheetIndex(0);
+
+		$sheet->setCellValue('A1', 'NIK');
+		$sheet->setCellValue('B1', 'NAMA');
+		$sheet->setCellValue('C1', 'LINE');
+		$sheet->setCellValue('D1', 'TEAM');
+		$sheet->setCellValue('E1', 'TANGGAL');
+
+		if ($dateRange) {
+			$kolomAwal = 5;
+			foreach ($dateRange as $date) {
+				$sheet->setCellValue(excel_number_to_column_name($kolomAwal) . '2', custom_date_format($date, 'Y-m-d', 'm/d'));
+
+				$kolomAwal +=  $jumlahPertanyaan;
+			} 
+		}
+
+		if ($allPertanyaan) {
+			$kolomAwal = 5;
+			foreach ($dateRange as $date) {
+				foreach ($allPertanyaan as $row) {
+					$sheet->setCellValue(excel_number_to_column_name($kolomAwal) . '3', $row['pertanyaan']);
+
+					$kolomAwal += 1;
+				}
+			}
+		}
+
+		$personal_data = $this->Report_Model->personal_data();
+
+		if ($personal_data) {
+			$baris = 4;
+			foreach ($personal_data as $row) {
+				$kolomAwal = 5;
+
+				$sheet->setCellValue('A' . $baris, $row->nik);
+				$sheet->setCellValue('B' . $baris, $row->nama);
+				$sheet->setCellValue('C' . $baris, $row->line);
+				$sheet->setCellValue('D' . $baris, $row->team);
+
+				if ($dateRange) {
+					foreach ($dateRange as $date) {
+						if ($allPertanyaan) {
+							foreach ($allPertanyaan as $val) {
+								$result = $this->Report_Model->get_pertanyaan_perhari($date, $row->nik, $val['id']);
+								$jawaban = isset($result->answer) ? $result->answer : '';
+
+								if ($result) {
+									$sheet->setCellValue(excel_number_to_column_name($kolomAwal) . $baris, $jawaban);
+								} else {
+									$sheet->setCellValue(excel_number_to_column_name($kolomAwal) . $baris, '');
+								}
+
+								$kolomAwal += 1;
+							}
+						}
+					}
+				}
+
+				$baris += 1;
+			}
+		}
+
+
+		$filename = 'Report-pertanyaan-' . date('d-m-Y');
 		// Redirect output to a client’s web browser (Xlsx)
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');

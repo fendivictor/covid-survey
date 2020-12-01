@@ -5,7 +5,7 @@ class Main_Model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-		
+		$this->covidDb = $this->load->database('covid', true);
 	}
 
 	public function create_counter($kolom, $tabel, $periode, $prefix)
@@ -37,6 +37,13 @@ class Main_Model extends CI_Model {
 	public function view_data($table, $condition, $multiple = 1)
 	{
 		$result = $this->db->where($condition)->get($table);
+
+		return ($multiple == 1) ? $result->result() : $result->row();
+	}
+
+	public function view_data_covid($table, $condition, $multiple = 1)
+	{
+		$result = $this->covidDb->where($condition)->get($table);
 
 		return ($multiple == 1) ? $result->result() : $result->row();
 	}

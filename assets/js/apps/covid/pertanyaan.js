@@ -39,14 +39,7 @@ $(() => {
         		let tbData = $("#tb-data").DataTable({
 					processing: true,
 					serverSide: false,
-					lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
-					buttons: [{
-				        extend: "excel",
-				        className: "btn yellow btn-outline ",
-				        title: 'Laporan Survey',
-				        text: '<i class="fa fa-file-excel"></i> Export to Excel'
-				    }],
-				    dom: "<'row'<'col-md-12 mb-4'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>"
+					lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]]
 				});
         	})
         	.fail(function(err) {
@@ -58,5 +51,14 @@ $(() => {
 
 	btnTampil.click(function() {
 		loadData();
+	});
+
+	btnDownload.click(function(e) {
+		var pertanyaan = [];
+        $.each($("input[name='pertanyaan']:checked"), function(){
+            pertanyaan.push($(this).val());
+        });
+
+		window.location.href = `${baseUrl}Excel/survey_result_by_question?pertanyaan=${pertanyaan}&datestart=${startDate.format('YYYY-MM-DD')}&dateend=${endDate.format('YYYY-MM-DD')}`;
 	});
 });

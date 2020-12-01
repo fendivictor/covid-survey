@@ -1,20 +1,35 @@
+<?php 
+$allPertanyaan = $this->Main_Model->view_data_covid('ms_pertanyaan', [], true);
+$jumlahAll = count($allPertanyaan);
+?>
 <div class="table-responsive">
 	<table class="table table-hovered table-striped" id="tb-data">
 		<thead>
 			<tr>
-				<th rowspan="2">#</th>
 				<th rowspan="2">NIK</th>
 				<th rowspan="2">Nama</th>
 				<th rowspan="2">Line</th>
 				<th rowspan="2">Team</th>
-				<th colspan="<?= count($pertanyaan) ?>">Pertanyaan</th>
+				<th colspan="<?= $jumlahAll ?>">Pertanyaan</th>
 				<th rowspan="2">Skor</th>
 			</tr>
 			<tr>
 				<?php 
+					$childArr = [];
 					if ($pertanyaan) {
 						foreach ($pertanyaan as $row) {
+							$child = $this->Main_Model->view_data_covid('ms_pertanyaan', ['id_parent' => $row->id], true);
+							$jumlahChild = count($child) + 1;
+
 							echo '<th>'.$row->pertanyaan.'</th>';
+
+							if ($child) {
+								foreach ($child as $val) {
+									echo '<th>'.$val->pertanyaan.'</th>';
+								}
+							}
+
+							$childArr[$row->id] = $jumlahChild;
 						}
 					}
 				 ?>
@@ -23,13 +38,11 @@
 		<tbody>
 			<?php  
 				if ($personal_data) {
-					$no = 1;
 					foreach ($personal_data as $row) {
 						$point = 0;
 
 						echo '
 						<tr>
-							<td>'.$no++.'</td>
 							<td>'.$row->nik.'</td>
 							<td>'.$row->nama.'</td>
 							<td>'.$row->line.'</td>
@@ -39,7 +52,7 @@
 
 						if ($jawaban) {
 							for ($i = 0; $i < count($jawaban); $i++) {
-								echo '<td>'.$jawaban[$i]['jawaban'];
+								echo '<td>'.$jawaban[$i]['jawaban'].'</td>';
 
 								$point += $jawaban[$i]['point'];
 
@@ -47,17 +60,20 @@
 
 								if ($child) {
 									for ($j = 0; $j < count($child); $j++) {
-										echo '<br /> <b>' . $jawaban[$i]['sub'][$j]['pertanyaan'] . '</b>';
-										echo '<br />' . $jawaban[$i]['sub'][$j]['jawaban'];
+										echo '<td>' . $jawaban[$i]['sub'][$j]['jawaban'] . '</td>';
 
 										$point += $jawaban[$i]['sub'][$j]['point'];
 									}
-								}
+								} else {
+									$jumlahChild = isset($childArr[$jawaban[$i]['id_pertanyaan']]) ? $childArr[$jawaban[$i]['id_pertanyaan']] : 0;
 
-								echo '</td>';
+									for ($j = 0; $j < ($jumlahChild - 1); $j++) {
+										echo '<td></td>';
+									}
+								}
 							}
 						} else {
-							for ($i = 0; $i < count($pertanyaan); $i++) {
+							for ($k = 0; $k < $jumlahAll; $k++) {
 								echo '<td></td>';
 							}
 						}

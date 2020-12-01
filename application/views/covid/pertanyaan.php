@@ -35,7 +35,7 @@
 			<div class="col-md-6">
 				<div class="form-group">
 					<button class="btn btn-primary" id="btn-tampil"><i class="fas fa-search"></i> <?= lang('btn_show'); ?></button>
-					<!-- <button class="btn btn-success" id="btn-download"><i class="fas fa-download"></i> <?= lang('btn_download'); ?></button> -->
+					<button class="btn btn-success" id="btn-download"><i class="fas fa-download"></i> <?= lang('btn_download'); ?></button>
 				</div>
 			</div>
 

@@ -250,7 +250,7 @@ class Report_Model extends CI_Model {
 
 		return $this->covidDb->query("
 			SELECT b.id, a.`tanggal`, a.`nik`, a.`user_insert`, b.`pertanyaan`, $answer, a.`point`,
-			IFNULL(c.`id`, '') AS id_penyakit, IFNULL(d.`title`, '') AS jenis_penyakit
+			IFNULL(c.`id`, '') AS id_penyakit, IFNULL(d.`title`, '') AS jenis_penyakit, a.id_pertanyaan
 			FROM tb_survei a
 			INNER JOIN ms_pertanyaan b ON a.`id_pertanyaan` = b.`id`
 			LEFT JOIN tb_jawaban c ON c.`id` = a.`id_penyakit`
@@ -271,6 +271,7 @@ class Report_Model extends CI_Model {
 		if ($survey) {
 			foreach ($survey as $row => $val) {
 				$response[$row] = [
+					'id_pertanyaan' => $val->id_pertanyaan,
 					'tgl' => $val->tanggal,
 					'nik' => $val->nik,
 					'user_insert' => $val->user_insert,
@@ -286,6 +287,7 @@ class Report_Model extends CI_Model {
 				if ($child) {
 					foreach ($child as $chl) {
 						$response[$row]['sub'][] = [
+							'id_pertanyaan' => $val->id_pertanyaan,
 							'tgl' => $chl->tanggal,
 							'nik' => $chl->nik,
 							'user_insert' => $chl->user_insert,
@@ -498,8 +500,8 @@ class Report_Model extends CI_Model {
 	public function get_pertanyaan_perhari($tgl, $nik, $pertanyaan)
 	{
 		return $this->covidDb->query("
-			SELECT a.`id`, a.`id_pertanyaan`, b.`pertanyaan`, b.`is_child`, b.`id_parent`, 
-			IF(a.`answer` = 1, 'Ya', 'Tidak') AS answer, a.`keterangan`
+			SELECT a.`id`, a.`id_pertanyaan`, b.`pertanyaan`, b.`is_child`, b.`id_parent`,  
+			a.`keterangan`, IF(a.keterangan <> '', a.keterangan, IF(d.title <> '', d.title, IF(a.`answer` = 1, 'Ya', 'Tidak'))) AS answer
 			FROM tb_survei a
 			INNER JOIN ms_pertanyaan b ON a.`id_pertanyaan` = b.`id`
 			LEFT JOIN tb_jawaban c ON c.`id` = a.`id_penyakit`
