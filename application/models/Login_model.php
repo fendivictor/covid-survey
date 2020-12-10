@@ -32,7 +32,7 @@ class Login_model extends CI_Model {
 				$cari = $this->db->where([
 					'session' => $cookie
 				])
-				->get('admin')
+				->get('tb_user')
 				->row();
 
 				if ($cari) {
