@@ -23,6 +23,7 @@ class Datatable extends CI_Controller {
 					'nama' => '<a href="javascript:;" class="show-details" data-nik="'.$row->nik.'" data-nama="'.$row->nama.'">'.$row->nama.'</a>',
 					'nik' => $row->nik,
 					'line' => $row->line,
+					'no_hp' => $row->no_hp,
 					'point' => $row->score
 				];
 			}

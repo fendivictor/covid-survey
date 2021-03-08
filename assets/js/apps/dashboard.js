@@ -178,7 +178,8 @@ $(() => {
 			{targets: 1, data: 'nik'},
 			{targets: 2, data: 'nama'},
 			{targets: 3, data: 'line'},
-			{targets: 4, data: 'point'}
+			{targets: 4, data: 'no_hp'},
+			{targets: 5, data: 'point'}
 		]
 	});
 

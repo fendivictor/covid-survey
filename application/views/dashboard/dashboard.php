@@ -29,6 +29,7 @@
 								<th>NIK</th>
 								<th>Nama</th>
 								<th>Line</th>
+								<th>No. HP</th>
 								<th>Point</th>
 							</tr>
 						</thead>

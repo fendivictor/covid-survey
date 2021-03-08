@@ -322,7 +322,7 @@ class Report_Model extends CI_Model {
 	public function get_high_risk_person($date)
 	{
 		return $this->covidDb->query("
-			SELECT b.*, c.`nama`, c.`line`
+			SELECT b.*, c.`nama`, c.`line`, c.no_hp
 			FROM (
 				SELECT a.`nik`, SUM(a.`point`) AS score
 				FROM tb_survei a
