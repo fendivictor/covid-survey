@@ -8,6 +8,7 @@ $jumlahAll = count($allPertanyaan);
 			<tr>
 				<th rowspan="2">NIK</th>
 				<th rowspan="2">Nama</th>
+				<th rowspan="2">No HP</th>
 				<th rowspan="2">Line</th>
 				<th rowspan="2">Team</th>
 				<th colspan="<?= $jumlahAll ?>">Pertanyaan</th>
@@ -45,6 +46,7 @@ $jumlahAll = count($allPertanyaan);
 						<tr>
 							<td>'.$row->nik.'</td>
 							<td>'.$row->nama.'</td>
+							<td>'.$row->no_hp.'</td>
 							<td>'.$row->line.'</td>
 							<td>'.$row->team.'</td>';
 

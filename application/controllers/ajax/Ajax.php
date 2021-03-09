@@ -148,6 +148,7 @@ class Ajax extends CI_Controller {
 		$team = $this->input->post('team', TRUE);
 		$jabatan = $this->input->post('jabatan', TRUE);
 		$gender = $this->input->post('gender', TRUE);
+		$no_hp = $this->input->post('no_hp', TRUE);
 
 		$tgllahir = custom_date_format($tgllahir, 'd/m/Y', 'Y-m-d');
 
@@ -159,7 +160,8 @@ class Ajax extends CI_Controller {
 			'jabatan' => $jabatan,
 			'gender' => $gender,
 			'tanggal_lahir' => $tgllahir,
-			'country' => 'indo'
+			'country' => 'indo',
+			'no_hp' => $no_hp
 		];
 
 		$condition = ($id != '') ? ['id' => $id] : [];

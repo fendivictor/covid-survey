@@ -16,12 +16,13 @@ $(() => {
 			{targets: 0, data: 'no'},
 			{targets: 1, data: 'nik'},
 			{targets: 2, data: 'nama'},
-			{targets: 3, data: 'line'},
-			{targets: 4, data: 'team'},
-			{targets: 5, data: 'jabatan'},
-			{targets: 6, data: 'gender'},
-			{targets: 7, data: 'tanggal_lahir'},
-			{targets: 8, data: 'tools', className: 'text-center', orderable: false}
+			{targets: 3, data: 'no_hp'},
+			{targets: 4, data: 'line'},
+			{targets: 5, data: 'team'},
+			{targets: 6, data: 'jabatan'},
+			{targets: 7, data: 'gender'},
+			{targets: 8, data: 'tanggal_lahir'},
+			{targets: 9, data: 'tools', className: 'text-center', orderable: false}
 		]
 	});
 
@@ -56,6 +57,7 @@ $(() => {
 					$("#id").val(data.id);
 					$("#nik").val(data.nik);
 					$("#nama").val(data.nama);
+					$("#no_hp").val(data.no_hp);
 					$("#tgllahir").data('daterangepicker').setStartDate(moment(data.tanggal_lahir).format('DD/MM/YYYY'));
 					$("#line").val(data.line);
 					$("#team").val(data.team);

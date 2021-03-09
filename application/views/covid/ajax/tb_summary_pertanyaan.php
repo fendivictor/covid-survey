@@ -29,6 +29,7 @@
 				<th rowspan="3">#</th>
 				<th rowspan="3">NIK</th>
 				<th rowspan="3">Nama</th>
+				<th rowspan="3">No HP</th>
 				<th rowspan="3">Line</th>
 				<th rowspan="3">Team</th>
 				<th colspan="<?= count($tgl) * count($allPertanyaan) ?>" align="center">Tanggal</th>
@@ -67,6 +68,7 @@
 							<td>'.$no++.'</td>
 							<td>'.$row->nik.'</td>
 							<td>'.$row->nama.'</td>
+							<td>'.$row->no_hp.'</td>
 							<td>'.$row->line.'</td>
 							<td>'.$row->team.'</td>';
 

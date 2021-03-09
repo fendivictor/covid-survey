@@ -4,6 +4,7 @@
 			<tr>
 				<th rowspan="2">NIK</th>
 				<th rowspan="2">Nama</th>
+				<th rowspan="2">No HP</th>
 				<th rowspan="2">Line</th>
 				<th colspan="<?= count($date); ?>" class="text-center">Tanggal</th>
 				<th rowspan="2" class="text-center">Rata-rata</th>
@@ -27,6 +28,7 @@
 							<tr>
 								<td>'.$row->nik.'</td>
 								<td>'.$row->nama.'</td>
+								<td>'.$row->no_hp.'</td>
 								<td>'.$row->line.'</td>
 						';
 

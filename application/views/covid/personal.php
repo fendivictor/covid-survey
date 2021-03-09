@@ -15,6 +15,7 @@
 								<th>#</th>
 								<th>NIK</th>
 								<th>Nama</th>
+								<th>No HP</th>
 								<th>Line</th>
 								<th>Team</th>
 								<th>Jabatan</th>
@@ -57,6 +58,10 @@
 	        		<div class="form-group">
 	        			<label for="tgllahir">Tgl Lahir <span class="text-danger">*</span></label>
 	        			<input type="text" class="form-control" name="tgllahir" id="tgllahir" autocomplete="off" required="required">
+	        		</div>
+	        		<div class="form-group">
+	        			<label for="nama">No HP </label>
+	        			<input type="text" class="form-control" name="no_hp" id="no_hp" autocomplete="off">
 	        		</div>
 	        		<div class="form-group">
 	        			<label for="line">Line <span class="text-danger">*</span></label>

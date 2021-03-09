@@ -75,6 +75,7 @@ class Datatable extends CI_Controller {
 					'no' => $no++,
 					'nik' => $row->nik,
 					'nama' => $row->nama,
+					'no_hp' => $row->no_hp,
 					'line' => $row->line,
 					'team' => $row->team,
 					'jabatan' => $row->jabatan,

@@ -104,14 +104,16 @@ class Excel extends CI_Controller {
 
 		$sheet->setCellValue('A1', 'NIK');
 		$sheet->setCellValue('B1', 'NAMA');
-		$sheet->setCellValue('C1', 'LINE');
-		$sheet->setCellValue('D1', 'TANGGAL');
+		$sheet->setCellValue('C1', 'NO HP');
+		$sheet->setCellValue('D1', 'LINE');
+		$sheet->setCellValue('E1', 'TANGGAL');
 
 		$merge[] = 'A1:A2';
 		$merge[] = 'B1:B2';
 		$merge[] = 'C1:C2';
+		$merge[] = 'D1:D2';
 
-		$baris = 4;
+		$baris = 5;
 		if ($dateRange) {
 			foreach ($dateRange as $tgl) {
 				$kolom = excel_number_to_column_name($baris);
@@ -121,7 +123,7 @@ class Excel extends CI_Controller {
 			}
 		}
 
-		$merge[] = "D1:".$kolom."1";
+		$merge[] = "E1:".$kolom."1";
 		$kolom = excel_number_to_column_name($baris);
 		$sheet->setCellValue($kolom."1", "TOTAL");
 
@@ -133,9 +135,10 @@ class Excel extends CI_Controller {
 			foreach ($personal as $val) {
 				$sheet->setCellValue("A$row", $val->nik);
 				$sheet->setCellValue("B$row", $val->nama);
-				$sheet->setCellValue("C$row", $val->line);
+				$sheet->setCellValue("C$row", $val->no_hp);
+				$sheet->setCellValue("D$row", $val->line);
 
-				$baris = 4;
+				$baris = 5;
 				$kolomAwal = excel_number_to_column_name($baris);
 				if ($dateRange) {
 					foreach ($dateRange as $dt) {
@@ -273,14 +276,16 @@ class Excel extends CI_Controller {
 
 		$sheet->setCellValue('A1', 'NIK');
 		$sheet->setCellValue('B1', 'NAMA');
-		$sheet->setCellValue('C1', 'LINE');
-		$sheet->setCellValue('D1', 'TANGGAL');
+		$sheet->setCellValue('C1', 'NO HP');
+		$sheet->setCellValue('D1', 'LINE');
+		$sheet->setCellValue('E1', 'TANGGAL');
 
 		$merge[] = 'A1:A2';
 		$merge[] = 'B1:B2';
 		$merge[] = 'C1:C2';
+		$merge[] = 'D1:D2';
 
-		$baris = 4;
+		$baris = 5;
 		if ($dateRange) {
 			foreach ($dateRange as $tgl) {
 				$kolom = excel_number_to_column_name($baris);
@@ -290,7 +295,7 @@ class Excel extends CI_Controller {
 			}
 		}
 
-		$merge[] = "D1:".$kolom."1";
+		$merge[] = "E1:".$kolom."1";
 		$kolom = excel_number_to_column_name($baris);
 		$sheet->setCellValue($kolom."1", "RATA-RATA");
 
@@ -302,9 +307,10 @@ class Excel extends CI_Controller {
 			foreach ($personal as $val) {
 				$sheet->setCellValue("A$row", $val->nik);
 				$sheet->setCellValue("B$row", $val->nama);
-				$sheet->setCellValue("C$row", $val->line);
+				$sheet->setCellValue("C$row", $val->no_hp);
+				$sheet->setCellValue("D$row", $val->line);
 
-				$baris = 4;
+				$baris = 5;
 				$kolomAwal = excel_number_to_column_name($baris);
 				if ($dateRange) {
 					foreach ($dateRange as $dt) {
@@ -408,12 +414,13 @@ class Excel extends CI_Controller {
 
 		$sheet->setCellValue('A1', 'NIK');
 		$sheet->setCellValue('B1', 'NAMA');
-		$sheet->setCellValue('C1', 'LINE');
-		$sheet->setCellValue('D1', 'TEAM');
-		$sheet->setCellValue('E1', 'TANGGAL');
+		$sheet->setCellValue('C1', 'NO HP');
+		$sheet->setCellValue('D1', 'LINE');
+		$sheet->setCellValue('E1', 'TEAM');
+		$sheet->setCellValue('F1', 'TANGGAL');
 
 		if ($dateRange) {
-			$kolomAwal = 5;
+			$kolomAwal = 6;
 			foreach ($dateRange as $date) {
 				$sheet->setCellValue(excel_number_to_column_name($kolomAwal) . '2', custom_date_format($date, 'Y-m-d', 'm/d'));
 
@@ -422,7 +429,7 @@ class Excel extends CI_Controller {
 		}
 
 		if ($allPertanyaan) {
-			$kolomAwal = 5;
+			$kolomAwal = 6;
 			foreach ($dateRange as $date) {
 				foreach ($allPertanyaan as $row) {
 					$sheet->setCellValue(excel_number_to_column_name($kolomAwal) . '3', $row['pertanyaan']);
@@ -437,12 +444,13 @@ class Excel extends CI_Controller {
 		if ($personal_data) {
 			$baris = 4;
 			foreach ($personal_data as $row) {
-				$kolomAwal = 5;
+				$kolomAwal = 6;
 
 				$sheet->setCellValue('A' . $baris, $row->nik);
 				$sheet->setCellValue('B' . $baris, $row->nama);
-				$sheet->setCellValue('C' . $baris, $row->line);
-				$sheet->setCellValue('D' . $baris, $row->team);
+				$sheet->setCellValue('C' . $baris, $row->no_hp);
+				$sheet->setCellValue('D' . $baris, $row->line);
+				$sheet->setCellValue('E' . $baris, $row->team);
 
 				if ($dateRange) {
 					foreach ($dateRange as $date) {
