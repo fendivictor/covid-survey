@@ -470,6 +470,30 @@ class Report_Model extends CI_Model {
 		}
 	}
 
+	public function store_data($table, $data, $condition = [], $bulk = false)
+    {   
+        $this->covidDb->trans_begin();
+        if ($condition) {
+            $this->covidDb->update($table, $data, $condition);
+        } else {
+            if ($bulk) {
+                $this->covidDb->insert_batch($table, $data);
+            } else {
+                $this->covidDb->insert($table, $data);
+            }
+        }
+
+        if ($this->covidDb->trans_status()) {
+            $this->covidDb->trans_commit();
+
+            return true;
+        } else {
+            $this->covidDb->trans_rollback();
+
+            return false;
+        }
+    }
+
 	public function delete_personal($nik)
 	{
 		$this->covidDb->trans_begin();

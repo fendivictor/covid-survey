@@ -5,7 +5,12 @@
 	<div class="card-body">
 		<div class="row">
 			<div class="col-md-12 text-right mb-4">
-				<button id="add-new" type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Tambah Data</button>
+				<button id="add-new" type="button" class="btn btn-primary btn-xs">
+					<i class="fa fa-plus"></i> Tambah Data
+				</button>
+				<button id="btn-upload" type="button" class="btn btn-warning btn-xs">
+					<i class="fa fa-upload"></i> Upload Data
+				</button>
 			</div>
 			<div class="col-md-12">
 				<div class="table-responsive">
@@ -86,6 +91,38 @@
 	            <div class="modal-footer justify-content-between">
               		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               		<button type="submit" class="btn btn-primary">Save changes</button>
+            	</div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="modal-upload" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+        	<div class="modal-header">
+                <h5 class="modal-title">
+                	Upload Karyawan
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="#" id="form-upload">
+	            <div class="modal-body">
+	        		<div class="form-group">
+	        			<input type="hidden" name="id" id="id">
+	        			<label for="file">File Excel <span class="text-danger">*</span></label>
+	        			<input type="file" class="form-control" name="file" id="file" autocomplete="off" required="required">
+
+	        			<a href="<?= base_url('assets/download/format_upload.xlsx'); ?>">
+	        				<i class="fa fa-download"></i> Download Format disini..
+	        			</a>
+	        		</div>
+	            </div>
+	            <div class="modal-footer justify-content-between">
+              		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              		<button type="submit" class="btn btn-primary">Upload</button>
             	</div>
             </form>
         </div>

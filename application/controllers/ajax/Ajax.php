@@ -1,5 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require('./phpspreadsheet/vendor/autoload.php');
+
+use PhpOffice\PhpSpreadsheet\Helper\Sample;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
 class Ajax extends CI_Controller {
 
 	public function __construct()
@@ -240,6 +246,82 @@ class Ajax extends CI_Controller {
 		$view = $this->load->view('covid/ajax/tb_summary_pertanyaan', $data, TRUE);
 
 		echo $view;
+	}
+
+	public function upload_personal()
+	{
+		$username = $this->input->post('username', TRUE);
+		$now = $this->Main_Model->get_time('%Y-%m-%d %H:%i:%s');
+
+		$config = [
+			'upload_path' => './assets/uploads/personal/',
+			'allowed_types' => 'xlsx|xls',
+			'file_name' => date('YmdHis').rand()
+		];
+
+		$this->load->library('upload', $config);
+
+		if (! $this->upload->do_upload('file')) {
+			$status = 0;
+			$message = $this->upload->display_errors();
+		} else {
+			$filename = $this->upload->data('file_name');
+
+			$extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+			if ($extension == 'xls') {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load('./assets/uploads/personal/'.$filename);
+			$personalData = $spreadsheet->getSheetByName('List Karyawan')->toArray(null, true, true, true);
+
+			$jumlahData = count($personalData);
+
+			$dataToInsert = [];
+			if ($jumlahData > 0) {
+				foreach ($personalData as $row => $val) {
+					if ($val['A'] != 'NIK' && $val['A'] != '') {
+						$dataToInsert[] = [
+							'nik' => $val['A'], 
+							'nama' => $val['B'],
+							'line' => $val['D'],
+							'team' => $val['E'],
+							'jabatan' => $val['F'],
+							'gender' => $val['G'],
+							'tanggal_lahir' => custom_date_format($val['H'], 'd/m/Y', 'Y-m-d'),
+							'no_hp' => $val['C'],
+							'country' => 'indo'
+						];
+
+						$existsPersonalData = $this->Report_Model->personal_data($val['A']);
+						if ($existsPersonalData) {
+							$this->Report_Model->delete_personal($val['A']);
+						}
+					}
+				}
+			}
+
+			$status = 0;
+			$message = 'Gagal menyimpan data';
+			if ($dataToInsert) {
+				$simpan = $this->Report_Model->store_data('ms_personal_data', $dataToInsert, [], true);
+
+				if ($simpan) {
+					$status = 1;
+					$message = 'Data berhasil disimpan';
+				}
+			}
+		}
+
+		$result = [
+			'status' => $status,
+			'message' => $message
+		];
+
+		echo json_encode($result);
 	}
 }
 

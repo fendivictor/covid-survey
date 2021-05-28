@@ -134,4 +134,40 @@ $(() => {
 
 		return false;
 	});
+
+	$("#btn-upload").click(function() {
+		$("#modal-upload").modal("show");
+	});
+
+	$("#form-upload").submit(function(e) {
+		e.preventDefault();
+		blockModal();
+
+		let config = {
+			url: `${baseUrl}ajax/Ajax/upload_personal`,
+			data: new FormData($(this)[0]),
+			dataType: 'json',
+			type: 'post',
+			contentType: false,
+			processData: false
+		}
+
+		$.ajax(config)
+			.done(function(data) {
+				unBlockModal();
+
+				(data.status == 1) ? toastr.success(data.message) : Swal.fire('', data.message, 'error');
+
+				if (data.status == 1) {
+					$("#modal-upload").modal('hide');
+					dtTable.ajax.reload(null, false);
+				}
+			})
+			.fail(function(err){
+				unBlockModal();
+				toastr.error('Terjadi kesalahan saat memuat data');
+			});
+
+		return false;
+	});
 });
